@@ -65,6 +65,7 @@ type GameState struct {
 	MinimumFood         int
 	HazardDamagePerTurn int
 	ShrinkEveryNTurns   int
+	ClassicFood         bool
 
 	// Internal game state
 	settings    map[string]string
@@ -102,6 +103,7 @@ func NewPlayCommand() *cobra.Command {
 	playCmd.Flags().BoolVarP(&gameState.Sequential, "sequential", "s", false, "Use Sequential Processing")
 	playCmd.Flags().StringVarP(&gameState.GameType, "gametype", "g", "standard", "Type of Game Rules")
 	playCmd.Flags().StringVarP(&gameState.MapName, "map", "m", "standard", "Game map to use to populate the board")
+	playCmd.Flags().BoolVar(&gameState.ClassicFood, "classic-food", false, "Use classic Snake food spawning (equivalent to --map classic_snake)")
 	playCmd.Flags().BoolVarP(&gameState.ViewMap, "viewmap", "v", false, "View the Map Each Turn")
 	playCmd.Flags().BoolVarP(&gameState.UseColor, "color", "c", false, "Use color to draw the map")
 	playCmd.Flags().Int64VarP(&gameState.Seed, "seed", "r", time.Now().UTC().UnixNano(), "Random Seed")
@@ -125,6 +127,10 @@ func NewPlayCommand() *cobra.Command {
 func (gameState *GameState) Initialize() error {
 	// Generate game ID
 	gameState.gameID = uuid.New().String()
+
+	if gameState.ClassicFood {
+		gameState.MapName = "classic_snake"
+	}
 
 	// Set up HTTP client with request timeout
 	if gameState.Timeout == 0 {

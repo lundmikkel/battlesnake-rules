@@ -40,6 +40,7 @@ Flags:
   -s, --sequential                Use Sequential Processing
   -g, --gametype string           Type of Game Rules (default "standard")
   -m, --map string                Game map to use to populate the board (default "standard")
+      --classic-food              Use classic Snake food spawning (equivalent to --map classic_snake)
   -v, --viewmap                   View the Map Each Turn
   -c, --color                     Use color to draw the map
   -r, --seed int                  Random Seed (default 1656460409268690000)
@@ -95,6 +96,19 @@ Version: 2
 Min Players: 1
 Max Players: 16
 Board Sizes (WxH): 7x7 9x9 11x11 13x13 15x15 17x17 19x19 21x21 23x23 25x25
+```
+
+#### Classic Snake food spawning
+Use the `classic_snake` map to enforce classic Snake food behavior: exactly one food is kept on the board at all times (unless no empty squares remain). Extra food is trimmed deterministically, and new food spawns only when the previous one is eaten. Random placement uses the provided seed, so runs are deterministic with `--seed`.
+
+Example:
+```
+battlesnake play -g solo --map classic_snake --seed 12345 --name mysnake --url http://example.com/snake
+```
+
+You can also use the convenience flag:
+```
+battlesnake play --classic-food --seed 12345 --name mysnake --url http://example.com/snake
 ```
 
 ### Sample Output
